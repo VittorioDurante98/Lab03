@@ -7,8 +7,8 @@ public class Dictionary {
 	
 	List<String> dizionarioInglese = new LinkedList<>();
 	List<String> dizionarioItaliano = new LinkedList<>();
-	List<String> dizionario = new LinkedList<>();
-	
+	//List<String> dizionario = new LinkedList<>();
+	List<String> dizionario = new ArrayList<>();
 	public void loadDictionary() {
 		
 		
@@ -44,6 +44,7 @@ public class Dictionary {
 		
 		//dizionario.addAll(dizionarioInglese);
 		//dizionario.addAll(dizionarioItaliano);
+		Collections.sort(dizionario);
 	}
 	
 	public List<RichWord> spellCheckText(List<String> inputTextList){
@@ -59,6 +60,35 @@ public class Dictionary {
 		}
 		
 		return e;
+	}
+	
+	public List<RichWord> spellCheckTextDichotomic(List<String> inputTextList){
+		
+		//List<RichWord> listaErr = new LinkedList<>();
+		List<RichWord> listaErr = new ArrayList<>();
+		for(String s: inputTextList) {
+			if(!searchM(s)) {
+				listaErr.add(new RichWord(s, false));
+			}
+				
+		}
+		return listaErr;
+	}
+	
+	public boolean searchM(String sTemp){
+		int inizio=0;
+		int fine = dizionario.size();
+		
+		while(inizio != fine) {
+			int medio = inizio+(fine-inizio)/2;
+			if(sTemp.compareToIgnoreCase(dizionario.get(medio))==0)
+				return true;
+			else if(sTemp.compareToIgnoreCase(dizionario.get(medio))>0)
+				inizio=medio+1;
+			else
+				fine=medio;
+		}
+		return false;
 	}
 
 }

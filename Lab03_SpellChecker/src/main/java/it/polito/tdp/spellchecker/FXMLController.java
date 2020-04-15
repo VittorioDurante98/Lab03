@@ -70,6 +70,8 @@ public class FXMLController {
     void doSpellCheck(ActionEvent event) {
     	List<String> testo = new LinkedList<>();
     	
+    	long startTime = System.nanoTime();
+    	
     	model.loadDictionary();
     	if(txtDaCorreggere.getText().isEmpty()) {
     		txtCorretto.appendText("Scrivi qualcosa!");
@@ -80,14 +82,16 @@ public class FXMLController {
         for(int i=0; i<array.length; i++) {
         	testo.add(i, array[i]);
         }
-        List<RichWord> testoErr = new LinkedList<>(model.spellCheckText(testo));
+        //List<RichWord> testoErr = new LinkedList<>(model.spellCheckText(testo));
+        List<RichWord> testoErr = new LinkedList<>(model.spellCheckTextDichotomic(testo));
         
         String s ="";
         for(RichWord r: testoErr)
         	s+=r;
-        
+        long estimateTime = System.nanoTime()-startTime;
         txtCorretto.appendText(s);
         laelErrori.setText("errori trovati: "+ testoErr.size());
+        laelStatus.setText("Tempo esecuzione: "+ (estimateTime)/1E9);
     }
 
     @FXML
